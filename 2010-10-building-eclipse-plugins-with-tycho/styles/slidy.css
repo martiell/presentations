@@ -110,14 +110,6 @@ div.handout {
   margin-right: 20px;
 }
 
-div.slide.titlepage {
-  text-align: center;
-}
-
-div.slide.titlepage.h1 {
-  padding-top: 10%;
-}
-
 div.slide h1 {
   padding-left: 0;
   padding-right: 20pt;
