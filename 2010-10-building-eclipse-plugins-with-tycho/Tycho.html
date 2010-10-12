@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-US">
+<head>
+<title>Building Eclipse plugins with Tycho</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="copyright" content="Copyright &#169; 2010 Contemplate Ltd." />
+<meta name="font-size-adjustment" content="1" />
+<link rel="stylesheet" href="styles/slidy.css" type="text/css" />
+<link rel="stylesheet" href="styles/w3c-blue.css" type="text/css">
+<script src="scripts/slidy.js" charset="utf-8" type="text/javascript">
+</script>
+</head>
+<body>
+<div class="background"><img alt="" id="head-icon" src="logo.png" /></div>
+
+<div class="slide cover">
+  <img src="graphics/contemplate.png" alt="" class="cover"/>
+  <div style="height: 30%;"></div>
+  <br clear="all" />
+  <h1>Building Eclipse plugins with Tycho</h1>
+  <h2>Martin Ellis</h2>
+</div>
+
+<div class="slide">
+<h1>Aims</h1>
+  <h2>To automate builds of Eclipse plugins...</h2>
+  <ul>
+    <li>Continuous Integration:
+      <ul>
+        <li>early warning of build issues, e.g. bad commits, dependency changes
+        <li>always have latest build ready to install (e.g. from an update site)
+      </ul>
+    </li>
+    <li>Testing:
+      <ul>
+	<li>builds outside dev. environment</li>
+	<li>reference environment: "works on my machine!"</li>
+      </ul>
+    <li>Reporting: Javadoc, Findbugs, etc.</li>
+    <li>Target platform management
+ </ul>
+</div>
+
+
+<div class="slide">
+<h1>Choices, choices...</h1>
+  <h2>Existing tools</h2>
+  <ul>
+    <li>Ant (via org.eclipse.ant.core.antRunner)
+    <li>Buckminster
+    <li>Maven 3 with Tycho plugin
+  </ul>
+</div>
+
+<div class="slide">
+<h1>Existing tools: Ant</h1>
+<h2>Ant must be run in OSGI environment...</h2>
+<pre>
+eclipse -nosplash -consoleLog \
+  -application org.eclipse.ant.core.antRunner \
+  -buildfile build.xml
+</pre>
+
+<pre style="font-size: 50%">
+&lt;project name="P2 Mirror" default="mirror"&gt;
+  &lt;property name="p2.root" value="${user.dir}/update"/&gt;
+  &lt;target name="mirror"&gt;
+    &lt;p2.mirror source="http://m2eclipse.sonatype.org/sites/m2e/0.10.2.20100623-1649/"
+               destination="${p2.root}/m2e"/&gt;
+    &lt;p2.mirror source="http://m2eclipse.sonatype.org/sites/m2e-extras"
+               destination="${p2.root}/m2e-extras"/&gt;
+    &lt;p2.mirror source="http://repository.sonatype.org/content/repositories/forge-sites/m2eclipse-tycho/0.4.3/N/0.4.3.201010041831/"
+               destination="${p2.root}/tycho"/&gt;
+   &lt;p2.composite.repository&gt;
+      &lt;repository location="${p2.root}" name="M2Eclipse and extras"/&gt;
+      &lt;add&gt;
+	&lt;repository location="m2e"/&gt;
+	&lt;repository location="m2e-extras"/&gt;
+	&lt;repository location="tycho"/&gt;
+      &lt;/add&gt;
+    &lt;/p2.composite.repository&gt;
+  &lt;/target&gt;
+&lt;/project&gt;
+</pre>
+</div>
+
+<div class="slide">
+  <h1>Creating an Eclipse plugin: Project type</h1>
+  <img src="images/hello-1-plugin-01.png" style="float: right;"/>
+  <ul>
+    <li>File&rarr;New</li>
+    <li>Other...</li>
+    <li><b>Plug-in Project</b></li>
+  </ul>
+</div>
+
+<div class="slide">
+  <h1>Creating an Eclipse plugin: Name/Location</h1>
+  <img src="images/hello-1-plugin-02.png" style="float: right;"/>
+  <ul>
+    <li>Set project name<li>
+    <li>Note: extra directory in project path</li>
+  </ul>
+<p>
+</div>
+<div class="slide">
+  <h1>Creating an Eclipse plugin: Plugin details</h1>
+  <img src="images/hello-1-plugin-03.png" style="float: right;"/>
+  <ul>
+    <li>Set the plugin ID</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating an Eclipse plugin: Pick a template</h1>
+  <img src="images/hello-1-plugin-04.png" style="float: right;"/>
+  <ul>
+    <li>Select a template</li>
+    <li>Click Finish</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating an Eclipse plugin: New Project</h1>
+  <img src="images/hello-1-plugin-05.png" style="float: right;"/>
+</div>
+<div class="slide">
+  <h1>Creating an Eclipse plugin: Make it testable!</h1>
+  <img src="images/hello-1-plugin-06.png" style="float: right;"/>
+</div>
+
+<div class="slide">
+  <h1>Creating a test bundle: Project type</h1>
+  <img src="images/hello-2-test-01.png" style="float: right;"/>
+  <ul>
+    <li>File&rarr;New</li>
+    <li>Other...</li>
+    <li><b>Fragment Project</b></li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating a test bundle: Name/Location</h1>
+  <img src="images/hello-2-test-02.png" style="float: right;"/>
+  <ul>
+    <li>Suffix: .tests</li>
+    <li>Extra directory in path</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating a test bundle: Plugin details</h1>
+  <img src="images/hello-2-test-03.png" style="float: right;"/>
+  <ul>
+    <li>Suffix: .tests (again)</li>
+    <li>and ...<li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating a test bundle: Name/Location</h1>
+  <img src="images/hello-2-test-04.png" style="float: right;"/>
+  <ul>
+    <li>Set Host Plug-in</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating a test bundle: MANIFEST.MF</h1>
+  <img src="images/hello-2-test-05.png" style="float: right;"/>
+</div>
+<div class="slide">
+  <h1>Creating a test bundle: Write tests</h1>
+  <img src="images/hello-2-test-06.png" style="float: right;"/>
+</div>
+
+<div class="slide">
+  <h1>Creating a Feature Project: Project type</h1>
+  <img src="images/hello-3-feature-01.png" style="float: right;"/>
+  <ul>
+    <li>File&rarr;New</li>
+    <li>Other...</li>
+    <li><b>Feature Project</b></li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating a Feature Project: Name/Location</h1>
+  <img src="images/hello-3-feature-02.png" style="float: right;"/>
+  <ul>
+    <li>Set project name<li>
+    <li>Note: extra directory in project path</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating a Feature Project: Select plugins</h1>
+  <img src="images/hello-3-feature-03.png" style="float: right;"/>
+</div>
+<div class="slide">
+  <h1>Creating a Feature Project: feature.xml</h1>
+  <img src="images/hello-3-feature-04.png" style="float: right;"/>
+</div>
+
+<div class="slide">
+  <h1>Creating an Update Site: Project type</h1>
+  <img src="images/hello-4-update-01.png" style="float: right;"/>
+  <ul>
+    <li>File&rarr;New</li>
+    <li>Other...</li>
+    <li><b>Update Site Project</b></li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating an Update Site: Name/Location</h1>
+  <img src="images/hello-4-update-02.png" style="float: right;"/>
+  <ul>
+    <li>Set project name<li>
+    <li>Note: extra directory in project path</li>
+  </ul>
+</div>
+<div class="slide">
+  <h1>Creating an Update Site: site.xml</h1>
+  <img src="images/hello-4-update-03.png" style="float: right;"/>
+</div>
+<div class="slide">
+  <h1>Creating an Update Site: &ldquo;Add Feature&rdquo;</h1>
+  <img src="images/hello-4-update-04.png" style="float: right;"/>
+</div>
+<div class="slide">
+  <h1>Creating an Update Site: site.xml</h1>
+  <img src="images/hello-4-update-05.png" style="float: right;"/>
+</div>
+
+
+<div class="slide">
+<h1>Tycho</h1>
+  <h2>Generate pom.xml files:</h2>
+  <p>This step only needs to be done once:</p>
+  <pre style="font-size: 60%">
+  mvn org.sonatype.tycho:maven-tycho-plugin:0.10.0:generate-poms \
+   -DgroupId=com.example.hello
+  </pre>
+  <h2>Build</h2>
+  <pre style="font-size: 60%">
+  mvn install -Dtycho.targetPlatform=/opt/eclipse
+  </pre>
+</div>
+
+
+<div class="slide">
+<h1>Example projects</h1>
+  <div class="vbox"></div>
+  <div class="hbox">
+  </div>
+</div>
+
+<div class="hidden">
+  <!-- hidden style graphics to ensure they are saved with other content -->
+  <img src="graphics/bullet.png" alt="" />
+  <img src="graphics/fold.gif" alt="" />
+  <img src="graphics/unfold.gif" alt="" />
+  <img src="graphics/fold-dim.gif" alt="" />
+  <img src="graphics/nofold-dim.gif" alt="" />
+  <img src="graphics/unfold-dim.gif" alt="" />
+  <img src="graphicsy/bullet-fold.gif" alt="" />
+  <img src="graphics/bullet-unfold.gif" alt="" />
+  <img src="graphics/bullet-fold-dim.gif" alt="" />
+  <img src="graphics/bullet-nofold-dim.gif" alt="" />
+  <img src="graphics/bullet-unfold-dim.gif" alt="" />
+</div>
+</body>
+</html>
