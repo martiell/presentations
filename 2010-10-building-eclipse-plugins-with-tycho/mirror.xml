@@ -1,5 +1,5 @@
 <project name="P2 Mirror" default="mirror">
-  <property name="p2.root" value="${user.dir}/update"/>
+  <property name="p2.root" value="${basedir}/update"/>
   <target name="mirror">
     <p2.mirror source="http://m2eclipse.sonatype.org/sites/m2e/0.10.2.20100623-1649/"
                destination="${p2.root}/m2e"/>
@@ -7,17 +7,8 @@
                destination="${p2.root}/m2e-extras"/>
     <p2.mirror source="http://repository.sonatype.org/content/repositories/forge-sites/m2eclipse-tycho/0.4.3/N/0.4.3.201010041831/"
                destination="${p2.root}/tycho"/>
-<!--
-    <p2.mirror
-       source="http://beust.com/eclipse/"
-       destination="${p2.root}"
-       ignoreErrors="true"
-       log="/dev/null">
-      <slicingOptions latestVersionOnly="true"/>
-    </p2.mirror>
--->
     <p2.composite.repository>
-      <repository location="${p2.root}" name="M2Eclipse and extras"/>
+      <repository location="${p2.root}" name="M2Eclipse/Tycho"/>
       <add>
 	<repository location="m2e"/>
 	<repository location="m2e-extras"/>
