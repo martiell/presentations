@@ -57,36 +57,27 @@
 </div>
 
 <div class="slide">
-<h1>Existing tools: Ant</h1>
-<h2>Ant must be run in OSGI environment...</h2>
-<pre>
-eclipse -nosplash -consoleLog \
-  -application org.eclipse.ant.core.antRunner \
-  -buildfile build.xml
-</pre>
-
-<pre style="font-size: 50%">
-&lt;project name="P2 Mirror" default="mirror"&gt;
-  &lt;property name="p2.root" value="${user.dir}/update"/&gt;
-  &lt;target name="mirror"&gt;
-    &lt;p2.mirror source="http://m2eclipse.sonatype.org/sites/m2e/0.10.2.20100623-1649/"
-               destination="${p2.root}/m2e"/&gt;
-    &lt;p2.mirror source="http://m2eclipse.sonatype.org/sites/m2e-extras"
-               destination="${p2.root}/m2e-extras"/&gt;
-    &lt;p2.mirror source="http://repository.sonatype.org/content/repositories/forge-sites/m2eclipse-tycho/0.4.3/N/0.4.3.201010041831/"
-               destination="${p2.root}/tycho"/&gt;
-   &lt;p2.composite.repository&gt;
-      &lt;repository location="${p2.root}" name="M2Eclipse and extras"/&gt;
-      &lt;add&gt;
-	&lt;repository location="m2e"/&gt;
-	&lt;repository location="m2e-extras"/&gt;
-	&lt;repository location="tycho"/&gt;
-      &lt;/add&gt;
-    &lt;/p2.composite.repository&gt;
-  &lt;/target&gt;
-&lt;/project&gt;
-</pre>
+<h1>Building and distributing a plugin</h1>
+  <h2>How to build and distribute an Eclipse plugin:</h2>
+  <ul>
+    <li>Create the Eclipse plugin
+    <li>Test it
+    <li>Create a &lsquo;feature&rsquo; that includes the plugin
+    <li>Create an update site that includes the feature
+  </ul>
+  <h2>How to install an Eclipse plugin:</h2>
+  <ul>
+    <li>Add the update site to the Eclipse Update Manager
+    <li>Install the feature that provides the plugin
+  </ul>
+  <p>Simpler way: for a simple plugin, it's possible to just copy it
+    into the eclipse/dropins directory</p>
 </div>
+
+
+  <p>The term Installable Unit
+  (or IU) is often used to refer to features.</p>
+
 
 <div class="slide">
   <h1>Creating an Eclipse plugin: Project type</h1>
@@ -132,6 +123,23 @@ eclipse -nosplash -consoleLog \
 </div>
 
 <div class="slide">
+<h1>Testing with fragment bundles</h1>
+  <h2>What is a fragment bundle?</h2>
+  <ul>
+    <li>A fragment bundle is a bundle with a
+      <tt style="font-weight:bold;">Fragment-Host:</tt>
+      MANIFEST.MF entry
+    <li>It &lsquo;attaches&rsquo; to a (non-fragment) host bundle
+    <li>Its classes are merged into the internal classpath of the host
+        bundle<sup>&dagger;</sup>
+    <li>Good for testing package private methods in OSGI env.
+  </ul>
+  <sup>&dagger;</sup> Description from
+  <a href="http://njbartlett.name/osgibook.html">OSGI in Practice</a>
+  by Neil Bartlett
+</div>
+
+<div class="slide">
   <h1>Creating a test bundle: Project type</h1>
   <img src="images/hello-2-test-01.png" style="float: right;"/>
   <ul>
@@ -173,6 +181,18 @@ eclipse -nosplash -consoleLog \
 </div>
 
 <div class="slide">
+<h1>Features</h1>
+  <h2>What is a feature?</h2>
+  <ul>
+    <li>A feature is a jar with a feature.xml file
+    <li>A feature.xml contains a list of bundles to install
+    <li>Typically, at least one of the bundles will be a plugin
+    <ul>
+      <li>But not features that only provide libraries and/or sources
+    </ul>
+  </ul>
+</div>
+<div class="slide">
   <h1>Creating a Feature Project: Project type</h1>
   <img src="images/hello-3-feature-01.png" style="float: right;"/>
   <ul>
@@ -196,6 +216,34 @@ eclipse -nosplash -consoleLog \
 <div class="slide">
   <h1>Creating a Feature Project: feature.xml</h1>
   <img src="images/hello-3-feature-04.png" style="float: right;"/>
+</div>
+
+<div class="slide">
+<h1>Update sites</h1>
+  <h2>What is an update site?</h2>
+  <ul>
+    <li>An update site is a directory with
+    <ul>
+      <li>a site.xml
+      <li>a p2 repository<sup>&dagger;</sup>
+    </ul>
+    <li>The site.xml maps features into categories
+    <li>The p2 repo includes
+    <ul>
+      <li>the features and plugins directories
+      <li>metadata: artifacts.jar and contents.jar (or similar)
+    </ul>
+  </ul>
+
+  <p style="margin-top: 0;margin-bottom: 0">
+    The update manager can work without the <it>site.xml</it>, but in
+    this case, the site.xml is specifying what features to include in
+    the repo.
+  </p>
+
+  <p style="font-size: 60%; margin-top: 0">
+    <sup>&dagger;</sup>(a modern p2-based repository, anyway)
+  </p>
 </div>
 
 <div class="slide">
@@ -249,6 +297,37 @@ eclipse -nosplash -consoleLog \
   <div class="vbox"></div>
   <div class="hbox">
   </div>
+</div>
+<div class="slide">
+<h1>Existing tools: Ant</h1>
+<h2>Ant must be run in OSGI environment...</h2>
+<pre>
+eclipse -nosplash -consoleLog \
+  -application org.eclipse.ant.core.antRunner \
+  -buildfile build.xml
+</pre>
+
+<pre style="font-size: 50%">
+&lt;project name="P2 Mirror" default="mirror"&gt;
+  &lt;property name="p2.root" value="${user.dir}/update"/&gt;
+  &lt;target name="mirror"&gt;
+    &lt;p2.mirror source="http://m2eclipse.sonatype.org/sites/m2e/0.10.2.20100623-1649/"
+               destination="${p2.root}/m2e"/&gt;
+    &lt;p2.mirror source="http://m2eclipse.sonatype.org/sites/m2e-extras"
+               destination="${p2.root}/m2e-extras"/&gt;
+    &lt;p2.mirror source="http://repository.sonatype.org/content/repositories/forge-sites/m2eclipse-tycho/0.4.3/N/0.4.3.201010041831/"
+               destination="${p2.root}/tycho"/&gt;
+   &lt;p2.composite.repository&gt;
+      &lt;repository location="${p2.root}" name="M2Eclipse and extras"/&gt;
+      &lt;add&gt;
+	&lt;repository location="m2e"/&gt;
+	&lt;repository location="m2e-extras"/&gt;
+	&lt;repository location="tycho"/&gt;
+      &lt;/add&gt;
+    &lt;/p2.composite.repository&gt;
+  &lt;/target&gt;
+&lt;/project&gt;
+</pre>
 </div>
 
 <div class="hidden">
