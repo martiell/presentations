@@ -51,8 +51,11 @@
   <h2>Existing tools</h2>
   <ul>
     <li>Ant (via org.eclipse.ant.core.antRunner)
+    <li>PDE Build
     <li>Buckminster
     <li>Maven 3 with Tycho plugin
+    <li>Pluginbuilder
+    <li>b3
   </ul>
 </div>
 
@@ -61,7 +64,7 @@
   <h2>How to build and distribute an Eclipse plugin:</h2>
   <ul>
     <li>Create the Eclipse plugin
-    <li>Test it
+    <li>Test it (we'll use a <em>fragment</em> bundle here)
     <li>Create a &lsquo;feature&rsquo; that includes the plugin
     <li>Create an update site that includes the feature
   </ul>
@@ -294,10 +297,32 @@
 
 <div class="slide">
 <h1>Example projects</h1>
-  <div class="vbox"></div>
-  <div class="hbox">
-  </div>
+  <ul>
+    <li>Tycho project (demo projects and integration tests)
+      <ul>
+        <li>See the tycho-demo and tycho-its directories
+        <li><a href="http://github.com/sonatype/sonatype-tycho">http://github.com/sonatype/sonatype-tycho</a>
+      </ul>
+    <li>M2Eclipse
+      <ul>
+        <li><a href="http://github.com/sonatype/m2eclipse-core">http://github.com/sonatype/m2eclipse-core</a>
+      </ul>
+    <li>Neoclipse
+      <ul>
+        <li><a href="https://svn.neo4j.org/components/neoclipse/trunk/">https://svn.neo4j.org/components/neoclipse/trunk/</a>
+      </ul>
+    <li>Scala IDE
+      <ul>
+        <li><a href="https://www.assembla.com/code/scala-ide/git/nodes">https://www.assembla.com/code/scala-ide/git/nodes</a>
+      </ul>
+    </ul>
+  <p><a href="http://anonsvn.jboss.org/repos/jbosstools/trunk/maven/plugins/">JBoss Tools</a>,
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/trunk/?root=TOOLS_MAT">Eclipse Memory Analyser</a>,
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.gef/?root=Tools_Project">GEF</a>,
+<a href="http://git.eclipse.org/c/mpc/org.eclipse.epp.mpc.git/">EPP MPC</a>, Woolsey, WST XSL, ...</p>
 </div>
+
+<!--
 <div class="slide">
 <h1>Existing tools: Ant</h1>
 <h2>Ant must be run in OSGI environment...</h2>
@@ -329,6 +354,7 @@ eclipse -nosplash -consoleLog \
 &lt;/project&gt;
 </pre>
 </div>
+-->
 
 <div class="hidden">
   <!-- hidden style graphics to ensure they are saved with other content -->
