@@ -279,25 +279,57 @@
   <img src="images/hello-4-update-05.png" style="float: right;"/>
 </div>
 
+<div class="slide">
+  <h1>Projects</h1>
+  <img src="images/hello-5-tycho-01.png"/>
+</div>
 
 <div class="slide">
 <h1>Tycho</h1>
   <h2>Generate pom.xml files:</h2>
-  <p>This step only needs to be done once:</p>
-  <pre style="font-size: 60%">
+  <p style="margin-bottom:0">This step only needs to be done once:</p>
+  <pre style="font-size: 60%;margin-top:0;margin-bottom:0">
   mvn org.sonatype.tycho:maven-tycho-plugin:0.10.0:generate-poms \
    -DgroupId=com.example.hello
   </pre>
-  <h2>Build</h2>
-  <pre style="font-size: 60%">
-  mvn install -Dtycho.targetPlatform=/opt/eclipse
-  </pre>
+
+  <img src="images/hello-5-tycho-02.png"/>
+</div>
+
+<div class="slide">
+  <h1>Build</h1>
+  <pre style="font-size: 60%;margin-top:30px; margin-bottom:0">
+  mvn install -Dtycho.targetPlatform=/opt/eclipse</pre>
+  <img src="images/hello-5-tycho-03.png"/>
+</div>
+
+
+<div class="slide">
+  <h1>M2Eclipse Tycho Support</h1>
+  <img src="images/m2e-01.png"/>
+</div>
+<div class="slide">
+  <h1>M2Eclipse Tycho Support</h1>
+  <img src="images/m2e-02.png"/>
+</div>
+
+<div class="slide">
+  <h1>Importing Maven/Tycho projects into Eclipse</h1>
+  <img src="images/hello-8-m2e-01.png"/>
+</div>
+<div class="slide">
+  <h1>Importing Maven/Tycho projects into Eclipse</h1>
+  <img src="images/hello-8-m2e-03.png"/>
+</div>
+<div class="slide">
+  <h1>Importing Maven/Tycho projects into Eclipse</h1>
+  <img src="images/hello-8-m2e-05.png"/>
 </div>
 
 
 <div class="slide">
 <h1>Example projects</h1>
-  <ul>
+  <ul style="margin-top:30px;">
     <li>Tycho project (demo projects and integration tests)
       <ul>
         <li>See the tycho-demo and tycho-its directories
